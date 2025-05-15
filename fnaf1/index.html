@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Mini FNAF</title>
+  <style>
+    body {
+      background: rgb(240, 4, 4);
+      color: rgb(206, 84, 14);
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    #screen {
+      margin-top: 20px;
+      padding: 20px;
+      background: #8f1414;
+      height: 200px;
+    }
+    #battery {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+    #jumpscare {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: red;
+      color: white;
+      font-size: 40px;
+      width: 100%;
+      height: 100%;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧸 FNAF Simples</h1>
+  <div>
+    <button onclick="checkCamera()">📷 Ver Câmeras</button>
+    <button onclick="toggleDoor()">🚪 Fechar/abrir Porta</button>
+  </div>
+  <div id="screen">Tudo calmo por enquanto...</div>
+  <div id="battery">🔋 Energia: 100%</div>
+
+  <div id="jumpscare">💀 JUMPSCARE! Você perdeu!</div>
+
+  <script>
+    let battery = 100;
+    let animatronicDistance = 5; // começa longe
+    let doorClosed = false;
+    let gameOver = false;
+
+    function updateScreen(message) {
+      document.getElementById("screen").innerText = message;
+    }
+
+    function updateBattery() {
+      battery -= doorClosed ? 5 : 2;
+      if (battery <= 0) {
+        battery = 0;
+        endGame("💀 Acabou a energia!");
+      }
+      document.getElementById("battery").innerText = `🔋 Energia: ${battery}%`;
+    }
+
+    function checkCamera() {
+      if (gameOver) return;
+      animatronicDistance--;
+      updateScreen(`👀 Você viu o animatrônico a ${animatronicDistance} salas de distância.`);
+      updateBattery();
+      checkAnimatronic();
+    }
+
+    function toggleDoor() {
+      if (gameOver) return;
+      doorClosed = !doorClosed;
+      updateScreen(doorClosed ? "🚪 Porta fechada!" : "🚪 Porta aberta!");
+      updateBattery();
+    }
+
+    function checkAnimatronic() {
+      if (animatronicDistance <= 0) {
+        if (!doorClosed) {
+          endGame("💀 O animatrônico entrou!");
+        } else {
+          animatronicDistance = 5; // ele vai embora
+          updateScreen("🙌 Você impediu o animatrônico a tempo!");
+        }
+      }
+    }
+
+    function endGame(message) {
+      gameOver = true;
+      updateScreen(message);
+      document.getElementById("jumpscare").style.display = "flex";
+    }
+
+    // Energia decai com o tempo
+    setInterval(() => {
+      if (!gameOver) {
+        updateBattery();
+      }
+    }, 5000);
+  </script>
+
+</body>
+</html>
