@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>RPG Simples</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #1c1c1c;
+      color: #ce50c5;
+      text-align: center;
+      padding: 30px;
+    }
+    .stats {
+      margin: 20px 0;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      background-color: #05e9e9;
+      color: rgb(238, 3, 3);
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #log {
+      background: #333;
+      padding: 15px;
+      margin-top: 20px;
+      height: 150px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Mini RPG de Batalha</h1>
+
+  <div class="stats">
+    <h2> 2 Scotty Catwow: <span id="heroHP">1.000</span> HP</h2>
+    <h2> 1 GOLDEN FREDDYMonstro: <span id="monsterHP">8.000</span> HP</h2>
+  </div>
+
+  <div>
+    <button onclick="attack()">⚔️ Atacar</button>
+    <button onclick="heal()">🧪 Curar</button>
+  </div>
+
+  <div id="log"></div>
+
+  <script>
+    let heroHP = 100;
+    let monsterHP = 100;
+
+    function log(message) {
+      const logDiv = document.getElementById("log");
+      logDiv.innerHTML += message + "<br>";
+      logDiv.scrollTop = logDiv.scrollHeight;
+    }
+
+    function updateStats() {
+      document.getElementById("heroHP").textContent = heroHP;
+      document.getElementById("monsterHP").textContent = monsterHP;
+    }
+
+    function attack() {
+      if (heroHP <= 0 || monsterHP <= 0) return;
+
+      const heroAttack = Math.floor(Math.random() * 20) + 5;
+      const monsterAttack = Math.floor(Math.random() * 15) + 5;
+
+      monsterHP -= heroAttack;
+      log(`👨‍🎤 Herói causou ${heroAttack} de dano!`);
+
+      if (monsterHP > 0) {
+        heroHP -= monsterAttack;
+        log(`👾 Monstro causou ${monsterAttack} de dano!`);
+      } else {
+        log("🏆 O herói venceu!");
+      }
+
+      if (heroHP <= 0) {
+        log("💀 O herói foi derrotado!");
+      }
+
+      updateStats();
+    }
+
+    function heal() {
+      if (heroHP <= 0 || monsterHP <= 0) return;
+
+      const healAmount = Math.floor(Math.random() * 17) + 10;
+      heroHP += healAmount;
+      log(`🧪 Herói se curou em ${healAmount} HP!`);
+
+      const monsterAttack = Math.floor(Math.random() * 19) + 5;
+      heroHP -= monsterAttack;
+      log(`👾 Monstro atacou e causou ${monsterAttack} de dano!`);
+
+      if (heroHP <= 0) {
+        log("💀 O herói foi derrotado!");
+      }
+
+      updateStats();
+    }
+  </script>
+
+</body>
+</html>
